@@ -17,7 +17,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true
+    this.getData()
+  }
 
+  getData(): void {
     this.currenciesService.getAll().subscribe(currencies => {
       this.currencies = currencies
       let usd = this.currencies.find(item => item.cc == 'USD')
@@ -31,4 +34,5 @@ export class AppComponent implements OnInit {
       this.loading = false
     })
   }
+
 }
