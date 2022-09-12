@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="from">
+    <h2>From...</h2>
+    <input *ngIf="fromCurrency != undefined && toCurrency != undefined" (focus)="testFunc(true)" [formControl]="fromInputControl" />
+    <div>
+      <select [formControl]="fromSelectControl">
+        <option [ngValue]="{cc: 'UAH'}">UAH</option>
+        <option *ngFor="let currency of currencies" [ngValue]="currency">
+          {{currency.cc}}
+        </option>
+      </select>
+    </div>
+  </div>
+  <img src="https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/convert-icon.png" alt='icon'>
+  <div class="to">
+    <h2>To...</h2>
+    <input *ngIf="fromCurrency != undefined && toCurrency != undefined" (focus)="testFunc(false)" [formControl]="toInputControl" />
+    <div>
+      <select [formControl]="toSelectControl">
+        <option [ngValue]="{cc: 'UAH'}">UAH</option>
+        <option *ngFor="let currency of currencies" [ngValue]="currency">
+          {{currency.cc}}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
