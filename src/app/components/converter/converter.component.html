@@ -1,27 +1,30 @@
 <div class="container">
-  <div class="from">
+  <fieldset [formGroup]="fromFormControl">
     <h2>From...</h2>
-    <input *ngIf="fromCurrency != undefined && toCurrency != undefined" (focus)="testFunc(true)" [formControl]="fromInputControl" />
+    <input *ngIf="fromCurrency != undefined && toCurrency != undefined" (focus)="changeFromToValue(true)" type="number"
+           formControlName="InputControl"/>
     <div>
-      <select [formControl]="fromSelectControl">
+      <select (focus)="changeFromToValue(true)" formControlName="SelectControl">
         <option [ngValue]="{cc: 'UAH'}">UAH</option>
         <option *ngFor="let currency of currencies" [ngValue]="currency">
           {{currency.cc}}
         </option>
       </select>
     </div>
-  </div>
+  </fieldset>
   <img src="https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/convert-icon.png" alt='icon'>
-  <div class="to">
+  <fieldset [formGroup]="toFormControl">
     <h2>To...</h2>
-    <input *ngIf="fromCurrency != undefined && toCurrency != undefined" (focus)="testFunc(false)" [formControl]="toInputControl" />
+    <input *ngIf="fromCurrency != undefined && toCurrency != undefined" (focus)="changeFromToValue(false)" type="number"
+           formControlName="InputControl"/>
     <div>
-      <select [formControl]="toSelectControl">
+      <select (focus)="changeFromToValue(false)" formControlName="SelectControl">
         <option [ngValue]="{cc: 'UAH'}">UAH</option>
         <option *ngFor="let currency of currencies" [ngValue]="currency">
           {{currency.cc}}
         </option>
       </select>
     </div>
-  </div>
+  </fieldset>
+
 </div>

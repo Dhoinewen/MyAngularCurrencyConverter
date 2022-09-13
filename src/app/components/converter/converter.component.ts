@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ICurrencies} from "../../models/currency";
-import {FormControl} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
+
 
 @Component({
   selector: 'app-converter',
@@ -10,67 +11,68 @@ import {FormControl} from "@angular/forms";
 export class ConverterComponent implements OnInit {
 
   @Input() currencies: ICurrencies[]
-  errorText: string
   exchangeFromTo = true
   fromCurrency: ICurrencies
   toCurrency: ICurrencies
-  fromSelectControl: FormControl
-  fromInputControl: FormControl
-  toSelectControl: FormControl
-  toInputControl: FormControl
+  fromFormControl: FormGroup
+  toFormControl: FormGroup
+
 
   ngOnInit(): void {
-    this.fromSelectControl = new FormControl()
-    this.toSelectControl = new FormControl()
-    this.fromInputControl = new FormControl(100)
-    this.toInputControl = new FormControl(1)
+    this.newFormsControl()
+    this.formChangesSubscribe()
+  }
 
-
-    this.fromSelectControl.valueChanges.subscribe((value) => {
-      this.fromCurrency = value
-      this.toInputControl.setValue((this.fromInputControl.value * this.calculateExchangeRate()).toFixed(2))
+  newFormsControl(): void {
+    this.fromFormControl = new FormGroup({
+      SelectControl: new FormControl(),
+      InputControl: new FormControl(1)
     })
 
-    this.toSelectControl.valueChanges.subscribe((value) => {
-      this.toCurrency = value
-      this.fromInputControl.setValue((this.toInputControl.value * this.calculateExchangeRate()).toFixed(2))
-    })
-
-    this.fromInputControl.valueChanges.subscribe((value) => {
-      if (this.exchangeFromTo) {
-        this.toInputControl.setValue((value * this.calculateExchangeRate()).toFixed(2))
-      }
-
-    })
-    this.toInputControl.valueChanges.subscribe((value) => {
-      if (!this.exchangeFromTo) {
-        this.fromInputControl.setValue((value * this.calculateExchangeRate()).toFixed(2))
-      }
+    this.toFormControl = new FormGroup({
+      SelectControl: new FormControl(),
+      InputControl: new FormControl(100)
     })
   }
 
-  testFunc(value: boolean): void {
+  formChangesSubscribe(): void {
+
+    this.fromFormControl.valueChanges.subscribe((value) => {
+      this.fromCurrency = value.SelectControl
+      if (this.exchangeFromTo) this.calculateResultValue(value.InputControl, this.toFormControl)
+    })
+
+    this.toFormControl.valueChanges.subscribe((value) => {
+      this.toCurrency = value.SelectControl
+      if (!this.exchangeFromTo) this.calculateResultValue(value.InputControl, this.fromFormControl)
+    })
+  }
+
+  calculateResultValue(value: number, form: FormGroup): void {
+    form.patchValue({InputControl: (value * this.calculateExchangeRate()).toFixed(2)})
+  }
+
+  changeFromToValue(value: boolean): void {
     this.exchangeFromTo = value
   }
 
-
   calculateExchangeRate(): number {
-    let exchangeRate: number = 0
+    let exchangeRate: number
     if (this.fromCurrency.cc == 'UAH' && this.toCurrency.cc == 'UAH') {
       exchangeRate = 1
       return exchangeRate
     }
-    if (this.fromCurrency.cc == 'UAH')  {
+    if (this.fromCurrency.cc == 'UAH') {
       if (this.exchangeFromTo) {
         exchangeRate = 1 / this.toCurrency.rate
       } else {
-        exchangeRate =  this.toCurrency.rate
+        exchangeRate = this.toCurrency.rate
       }
       return exchangeRate
     }
     if (this.toCurrency.cc == 'UAH') {
       if (this.exchangeFromTo) {
-        exchangeRate =  this.fromCurrency.rate
+        exchangeRate = this.fromCurrency.rate
       } else {
         exchangeRate = 1 / this.fromCurrency.rate
       }
@@ -83,6 +85,5 @@ export class ConverterComponent implements OnInit {
     }
     return exchangeRate
   }
-
 
 }
