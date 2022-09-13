@@ -58,31 +58,8 @@ export class ConverterComponent implements OnInit {
 
   calculateExchangeRate(): number {
     let exchangeRate: number
-    if (this.fromCurrency.cc == 'UAH' && this.toCurrency.cc == 'UAH') {
-      exchangeRate = 1
-      return exchangeRate
-    }
-    if (this.fromCurrency.cc == 'UAH') {
-      if (this.exchangeFromTo) {
-        exchangeRate = 1 / this.toCurrency.rate
-      } else {
-        exchangeRate = this.toCurrency.rate
-      }
-      return exchangeRate
-    }
-    if (this.toCurrency.cc == 'UAH') {
-      if (this.exchangeFromTo) {
-        exchangeRate = this.fromCurrency.rate
-      } else {
-        exchangeRate = 1 / this.fromCurrency.rate
-      }
-      return exchangeRate
-    }
-    if (this.exchangeFromTo) {
-      exchangeRate = this.fromCurrency.rate / this.toCurrency.rate
-    } else {
-      exchangeRate = this.toCurrency.rate / this.fromCurrency.rate
-    }
+    this.exchangeFromTo ? exchangeRate = this.fromCurrency.rate / this.toCurrency.rate
+      : exchangeRate = this.toCurrency.rate / this.fromCurrency.rate
     return exchangeRate
   }
 

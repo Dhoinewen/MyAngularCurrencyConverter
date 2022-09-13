@@ -5,7 +5,7 @@
            formControlName="InputControl"/>
     <div>
       <select (focus)="changeFromToValue(true)" formControlName="SelectControl">
-        <option [ngValue]="{cc: 'UAH'}">UAH</option>
+        <option [ngValue]="{cc: 'UAH', rate: 1}">UAH</option>
         <option *ngFor="let currency of currencies" [ngValue]="currency">
           {{currency.cc}}
         </option>
@@ -19,7 +19,7 @@
            formControlName="InputControl"/>
     <div>
       <select (focus)="changeFromToValue(false)" formControlName="SelectControl">
-        <option [ngValue]="{cc: 'UAH'}">UAH</option>
+        <option [ngValue]="{cc: 'UAH', rate: 1}">UAH</option>
         <option *ngFor="let currency of currencies" [ngValue]="currency">
           {{currency.cc}}
         </option>
